@@ -1,6 +1,7 @@
 # 网站建设中页面
 
 具有多语言支持、深色模式和流畅过渡效果的苹果风格建设中页面。
+![Preview](https://cdn.jsdelivr.net/gh/hwangzhun/Apple-style-Website-under-construction-page@main/Preview.gif)
 
 ## 功能特性
 
