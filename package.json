@@ -1,0 +1,28 @@
+{
+  "name": "under-construction-page",
+  "version": "1.0.0",
+  "description": "Apple-style under construction page with multi-language support, dark mode and smooth transitions",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html --public-url ./",
+    "clean": "rimraf dist .parcel-cache"
+  },
+  "keywords": [
+    "under-construction",
+    "multi-language",
+    "dark-mode",
+    "responsive"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/optimizer-terser": "^2.15.4",
+    "parcel": "^2.10.0",
+    "rimraf": "^5.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

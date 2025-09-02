@@ -90,7 +90,7 @@
           height: 72px;
           border-radius: 18px;
           display: inline-block;
-          background: url('Settings.svg') center/contain no-repeat;
+          background: url('https://cdn.jsdelivr.net/gh/hwangzhun/Apple-style-Website-under-construction-page@main/Settings.svg') center/contain no-repeat;
           background-size: 60%;
       }
 
