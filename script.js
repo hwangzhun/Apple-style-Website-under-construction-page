@@ -99,51 +99,120 @@ function hideLoading(){
 
 // Compute a fixed min-height based on the longest localized content (so switching languages won't resize)
 function computeMinHeight(){
-  // create a temporary offscreen node to measure
+  const isMobile = window.innerWidth <= 640;
+  
+  // 创建临时测量容器，完全复制pageCard的结构和样式
   const temp = document.createElement('div');
   temp.style.position = 'absolute';
   temp.style.left = '-9999px';
   temp.style.top = '0';
-  temp.style.width = getComputedStyle(pageCard).maxWidth || '640px';
+  temp.style.visibility = 'hidden';
+  
+  // 使用pageCard的实际宽度，而不是maxWidth
+  const pageCardRect = pageCard.getBoundingClientRect();
+  temp.style.width = pageCardRect.width + 'px';
   temp.style.padding = getComputedStyle(pageCard).padding;
   temp.style.boxSizing = 'border-box';
   temp.style.fontFamily = getComputedStyle(document.body).fontFamily;
+  temp.style.fontSize = getComputedStyle(document.body).fontSize;
+  temp.style.lineHeight = getComputedStyle(document.body).lineHeight;
+  temp.style.borderRadius = getComputedStyle(pageCard).borderRadius;
+  temp.style.display = 'flex';
+  temp.style.flexDirection = 'column';
+  
+  // 复制所有相关的CSS变量
+  const computedStyle = getComputedStyle(document.documentElement);
+  temp.style.setProperty('--text', computedStyle.getPropertyValue('--text'));
+  temp.style.setProperty('--muted', computedStyle.getPropertyValue('--muted'));
+  temp.style.setProperty('--card-bg', computedStyle.getPropertyValue('--card-bg'));
+  temp.style.setProperty('--glass-shadow', computedStyle.getPropertyValue('--glass-shadow'));
+  
   document.body.appendChild(temp);
 
   let maxH = 0;
+  let heightDetails = {}; // 记录每种语言的高度详情
+  
   Object.keys(I18N).forEach(key => {
+    // 使用实际的响应式字体大小
+    const titleFontSize = isMobile ? '22px' : '28px';
+    const subtitleFontSize = isMobile ? '14px' : '15px';
+    const infoTitleFontSize = isMobile ? '15px' : '16px';
+    const infoDescFontSize = isMobile ? '13px' : '14px';
+    
+    // 创建完整的pageCard结构
     temp.innerHTML = `
-      <div style="padding:20px 12px 8px 12px; text-align:center;">
-        <div style="height:72px; margin-bottom:8px;"></div>
-        <h1 style="margin:6px 0 0; font-size:28px; font-weight:600">${I18N[key].title}</h1>
-        <p style="margin:6px 0 0; color:var(--muted); font-size:15px">${I18N[key].subtitle}</p>
-        <div style="height:18px"></div>
-        <div style="height:6px; margin-bottom:18px;"></div>
-        <div style="display:flex; gap:12px; align-items:flex-start; justify-content:center; text-align:center; padding:14px;">
-          <div style="display:flex; gap:12px; align-items:center; justify-content:center; width:44px; height:44px; flex:0 0 44px;">
-            <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
-            <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
-            <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
-            <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
-          </div>
-          <div>
-            <h3 style="margin:0 0 6px; font-size:16px">${I18N[key].infoTitle}</h3>
-            <p style="margin:0; color:var(--muted)">${I18N[key].infoDesc}</p>
+      <!-- Controls -->
+      <div style="position:absolute; right:18px; top:18px; display:flex; gap:8px; align-items:center;">
+        <button style="width:40px; height:36px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center;">🌙</button>
+      </div>
+
+      <!-- Hero Section -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px 12px 8px 12px; text-align:center;">
+        <span style="width:72px; height:72px; border-radius:18px; display:inline-block; background:url('https://cdn.jsdelivr.net/gh/hwangzhun/Apple-style-Website-under-construction-page@main/Settings.svg') center/contain no-repeat; background-size:60%;"></span>
+        <div>
+          <h1 style="margin:6px 0 0; font-size:${titleFontSize}; font-weight:600; line-height:1.3">${I18N[key].title}</h1>
+          <p style="margin:0; color:var(--muted); font-size:${subtitleFontSize}; line-height:1.5">${I18N[key].subtitle}</p>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div style="margin-top:18px; width:100%; max-width:640px; margin-left:auto; margin-right:auto;">
+          <div style="height:6px; border-radius:999px; background:linear-gradient(90deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.03)); overflow:hidden;">
+            <div style="height:100%; width:50%; border-radius:999px; background:linear-gradient(90deg, #007aff, #00c6ff); transform:translateX(-100%);"></div>
           </div>
         </div>
       </div>
+
+      <!-- Info Card -->
+      <div style="margin-top:30px; border-radius:14px; padding:14px; background:transparent; display:flex; gap:12px; align-items:flex-start; box-shadow:none; justify-content:center; text-align:center;">
+        <div style="flex:0 0 44px; display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:20px;">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--text); opacity:0.25;"></div>
+        </div>
+        <div>
+          <h3 style="margin:0 0 6px; font-size:${infoTitleFontSize}; line-height:1.3">${I18N[key].infoTitle}</h3>
+          <p style="margin:0; color:var(--muted); font-size:${infoDescFontSize}; line-height:1.5">${I18N[key].infoDesc}</p>
+        </div>
+      </div>
+
+      <!-- Language Buttons -->
+      <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:auto; margin-bottom:18px;">
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">中文</button>
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">English</button>
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">日本語</button>
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">한국어</button>
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">Español</button>
+        <button style="border-radius:999px; padding:6px 12px; font-size:14px;">Français</button>
+      </div>
+
+      <!-- Footer -->
+      <footer style="margin-top:0; text-align:center; color:var(--muted); font-size:13px; padding-top:0;">© 2025 Hwangzhun</footer>
     `;
-    // force layout and measure
+    
+    // 强制布局并测量
     const h = temp.getBoundingClientRect().height;
+    heightDetails[key] = h;
     if(h > maxH) maxH = h;
   });
 
   document.body.removeChild(temp);
 
-  // Add some slack for padding, progress bar, language buttons, footer
-  const slack = 160; // px - increased for better spacing
-  const final = Math.ceil(maxH + slack);
+  // 设置计算出的最大高度
+  const final = Math.ceil(maxH);
   pageCard.style.minHeight = final + 'px';
+  
+  // 输出详细的高度信息用于调试
+  console.log(`=== 高度计算完成 (${isMobile ? '移动端' : '桌面端'}) ===`);
+  console.log(`测量容器宽度: ${pageCardRect.width}px`);
+  console.log(`视口宽度: ${window.innerWidth}px`);
+  console.log('各语言高度详情:');
+  Object.entries(heightDetails).forEach(([lang, height]) => {
+    console.log(`  ${lang}: ${Math.ceil(height)}px`);
+  });
+  console.log(`最大高度: ${final}px`);
+  console.log(`设置的最小高度: ${final}px`);
+  console.log('========================');
 }
 
 // Language switch with fade animation
@@ -212,7 +281,20 @@ window.addEventListener('load', ()=>{
   setTimeout(hideLoading, 420);
 });
 
-let rz; window.addEventListener('resize', ()=>{ clearTimeout(rz); rz = setTimeout(computeMinHeight, 180); });
+// 优化的 resize 监听器
+let resizeTimeout;
+let lastWidth = window.innerWidth;
+
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    // 只有在宽度变化时才重新计算（避免移动端滚动触发）
+    if (Math.abs(window.innerWidth - lastWidth) > 10) {
+      computeMinHeight();
+      lastWidth = window.innerWidth;
+    }
+  }, 250); // 增加延迟，避免频繁触发
+});
 
 // Accessibility: allow Shift+D to toggle theme (with smooth transition)
 document.addEventListener('keydown', (e)=>{

@@ -219,7 +219,8 @@
           flex-wrap: wrap;
           gap: 8px;
           justify-content: center;
-          margin-top: 18px
+          margin-top: auto;
+          margin-bottom: 18px;
       }
 
       .lang-btns .btn {
@@ -227,11 +228,52 @@
       }
 
       footer.foot {
-          margin-top: auto;
+          margin-top: 0;
           text-align: center;
           color: var(--muted);
           font-size: 13px;
-          padding-top: 18px;
+          padding-top: 0;
+      }
+
+      /* 页面底部信息样式 - 单个框框，支持换行 */
+      .bottom-info {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          z-index: 100;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          align-items: center;
+          justify-content: center;
+          background: var(--card-bg);
+          padding: 8px 16px;
+          border-radius: 8px;
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          max-width: 90vw;
+      }
+
+      .copyright {
+          color: var(--muted);
+          font-size: 12px;
+          white-space: nowrap;
+      }
+
+      .icp-link {
+          color: var(--muted);
+          font-size: 12px;
+          text-decoration: none;
+          transition: color 0.3s ease;
+          white-space: nowrap;
+      }
+
+      .icp-link:hover {
+          color: var(--text);
+          text-decoration: underline;
       }
 
       /* loading overlay (three dots) */
@@ -317,13 +359,31 @@
       }
 
       /* responsiveness */
-      @media (max-width:640px) {
-          .glass {
-              padding: 20px;
-              border-radius: 16px
-          }
+@media (max-width:640px) {
+  .glass {
+    padding: 20px;
+    border-radius: 16px;
+    /* 确保在小屏幕上有足够的最小高度 */
+    min-height: 500px;
+  }
 
-          h1.title {
-              font-size: 22px
-          }
-      }
+  h1.title {
+    font-size: 22px;
+    line-height: 1.3; /* 添加明确的行高 */
+  }
+  
+  p.subtitle {
+    font-size: 14px; /* 移动端稍小字体 */
+    line-height: 1.5; /* 增加行高提高可读性 */
+  }
+  
+  .info-card h3 {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  
+  .info-card p {
+    font-size: 13px; /* 移动端稍小字体 */
+    line-height: 1.5; /* 增加行高提高可读性 */
+  }
+}
